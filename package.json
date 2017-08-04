@@ -1,0 +1,31 @@
+{
+  "name": "@sitespeed.io/chromedriver",
+  "version": "2.31.0",
+  "description": "Install and launch Chromedriver for Mac, Linux or Windows.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "install": "node install.js",
+    "test": "node test.js",
+    "check-latest": "node check-latest.js"
+  },
+  "keywords": [
+    "webdriver",
+    "chromedriver",
+    "chrome"
+  ],
+  "author": "Tobias Lidskog <tobias@lidskog.se>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sitespeedio/chromedriver.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "download": "^4.4.1",
+    "download-status": "^2.2.1"
+  },
+  "devDependencies": {
+    "request": "^2.69.0",
+    "semver": "^5.0.1"
+  }
+}

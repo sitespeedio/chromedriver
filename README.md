@@ -12,4 +12,4 @@ var p = driver.binPath();
 // launch chromedriver from path
 ```
 
-You can ovveride where you download the Chromedriver by setting *process.env.CHROMEDRIVER_BASE_URL*.
+You can override where you download the Chromedriver by setting *process.env.CHROMEDRIVER_BASE_URL*.

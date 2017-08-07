@@ -1,6 +1,6 @@
 const cp = require('child_process');
 const semver = require('semver');
-const chromedriver = require('./').chromedriver;
+const chromedriver = require('./');
 const packageVersion = require('./package.json').version;
 
 const expectedVersionPrefix =

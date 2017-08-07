@@ -6,10 +6,10 @@ I had an updated package to include in [Browsertime](http://www.browsertime.net)
 
 How to use?
 ```node
-var driver = require('@sitespeed.io/chromedriver').chromedriver;
+const driver = require('@sitespeed.io/chromedriver');
 
-var p = driver.binPath();
-// launch chromedriver from path
+const binPath = driver.binPath();
+// launch chromedriver from binPath
 ```
 
 You can override where you download the Chromedriver by setting *process.env.CHROMEDRIVER_BASE_URL*.

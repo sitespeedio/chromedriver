@@ -3,13 +3,14 @@
 const Download = require('download');
 const downloadStatus = require('download-status');
 const os = require('os');
+const pkg = require('./package');
 
 function getChromedriverUrl() {
   let urlBase;
   if (process.env.CHROMEDRIVER_BASE_URL) {
     urlBase = process.env.CHROMEDRIVER_BASE_URL;
   } else {
-    urlBase = 'https://chromedriver.storage.googleapis.com/2.31/';
+    urlBase = `https://chromedriver.storage.googleapis.com/${pkg.chromedriver_version}/`;
   }
 
   switch (os.platform()) {

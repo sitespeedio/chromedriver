@@ -2,8 +2,7 @@
 'use strict';
 
 const request = require('request');
-const semver = require('semver');
-const packageVersion = require('./package.json').version;
+const currentVersion = require('./package.json').chromedriver_version;
 
 request('https://chromedriver.storage.googleapis.com/LATEST_RELEASE', function(
   error,
@@ -15,10 +14,10 @@ request('https://chromedriver.storage.googleapis.com/LATEST_RELEASE', function(
     return process.exit(1);
   }
 
-  const latestSemver = body.trim() + '.0'; // Hack for the fact that chromedriver version lacks patch version
-  if (semver.gt(latestSemver, packageVersion, true)) {
-    console.log('Upgrade to ' + body);
+  const latestVersion = Number(body.trim());
+  if (latestVersion > Number(currentVersion)) {
+    console.log(`Upgrade to ${latestVersion}`);
     process.exit(1);
   }
-  console.log('Relax, ' + packageVersion + ' is the latest version');
+  console.log(`Relax, ${currentVersion} is the latest version`);
 });

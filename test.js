@@ -1,13 +1,8 @@
 const cp = require('child_process');
-const semver = require('semver');
 const chromedriver = require('./');
-const packageVersion = require('./package.json').version;
+const packageVersion = require('./package.json').chromedriver_version;
 
-const expectedVersionPrefix =
-  'ChromeDriver ' +
-  semver.major(packageVersion) +
-  '.' +
-  semver.minor(packageVersion);
+const expectedVersionPrefix = `ChromeDriver ${packageVersion}`;
 
 const driverVersion = cp
   .execFileSync(chromedriver.binPath(), ['--version'])

@@ -1,7 +1,6 @@
 'use strict';
 
-const Download = require('download');
-const downloadStatus = require('download-status');
+const download = require('download');
 const os = require('os');
 const pkg = require('./package');
 
@@ -30,12 +29,6 @@ function getChromedriverUrl() {
   }
 }
 
-new Download({ mode: '755', extract: true })
-  .get(getChromedriverUrl())
-  .dest('vendor')
-  .use(downloadStatus())
-  .run(function(err) {
-    if (err) {
-      throw err;
-    }
-  });
+// eslint-disable-next-line no-console
+console.log(`Downloading from ${getChromedriverUrl()}`);
+download(getChromedriverUrl(), 'vendor', { mode: '755', extract: true });

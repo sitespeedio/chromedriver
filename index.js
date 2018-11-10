@@ -1,8 +1,8 @@
 'use strict';
 
-var os = require('os'),
-  path = require('path'),
-  pkg = require('./package');
+const os = require('os');
+const path = require('path');
+const pkg = require('./package');
 
 module.exports.chromedriver = {
   version: pkg.version,

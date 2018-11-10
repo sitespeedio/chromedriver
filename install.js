@@ -7,6 +7,7 @@ const { DownloaderHelper } = require('node-downloader-helper');
 const { promisify } = require('util');
 const unlink = promisify(fs.unlink);
 const mkdir = promisify(fs.mkdir);
+const chmod = promisify(fs.chmod);
 
 const CHROMEDRIVER_VERSION = '2.43';
 function byteHelper(value) {
@@ -79,6 +80,7 @@ async function download() {
             );
             zip.close();
             await unlink('vendor/chromedriver.zip');
+            await chmod('vendor/chromedriver', '755');
           });
         });
       });

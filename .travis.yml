@@ -4,4 +4,4 @@ node_js:
 - '8'
 - '10'
 script:
-- npm test && npm run check-latest
+- node install.js && npm test && npm run check-latest

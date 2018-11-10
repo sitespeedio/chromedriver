@@ -1,7 +1,7 @@
 language: node_js
 dist: trusty
 node_js:
-- '6'
-- '7'
+- '8'
+- '10'
 script:
 - npm test && npm run check-latest

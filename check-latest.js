@@ -2,7 +2,7 @@
 'use strict';
 
 const request = require('request');
-const currentVersion = require('./package.json').chromedriver_version;
+const currentVersion = require('./package.json').version;
 
 request(
   'https://chromedriver.storage.googleapis.com/LATEST_RELEASE',

@@ -5,7 +5,7 @@ const path = require('path');
 const pkg = require('./package');
 
 module.exports = {
-  version: pkg.chromedriver_version,
+  version: pkg.version,
   binPath: function() {
     let driverPath = path.resolve(__dirname, 'vendor', 'chromedriver');
     if (os.platform() === 'win32') {

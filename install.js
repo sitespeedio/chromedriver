@@ -3,13 +3,16 @@
 const StreamZip = require('node-stream-zip');
 const os = require('os');
 const fs = require('fs');
+const path = require('path');
 const { DownloaderHelper } = require('node-downloader-helper');
 const { promisify } = require('util');
 const unlink = promisify(fs.unlink);
 const mkdir = promisify(fs.mkdir);
 const chmod = promisify(fs.chmod);
 
-const CHROMEDRIVER_VERSION = '2.43';
+// The version of the driver that will be installed
+const CHROMEDRIVER_VERSION = '2.44';
+
 function byteHelper(value) {
   // https://gist.github.com/thomseddon/3511330
   const units = ['b', 'kB', 'MB', 'GB', 'TB'],
@@ -44,56 +47,66 @@ function getChromedriverUrl() {
 }
 
 async function download() {
-  const downloadUrl = getChromedriverUrl();
-  if (downloadUrl) {
-    try {
-      await mkdir('vendor');
-    } catch (e) {
-      await unlink('vendor/chromedriver');
-    }
-    const dl = new DownloaderHelper(downloadUrl, 'vendor', {
-      fileName: 'chromedriver.zip'
-    });
-
-    dl
-      .on('error', err =>
-        console.error('Could not download Chromedriver: ' + downloadUrl, err)
-      )
-      .on('progress', stats => {
-        const progress = stats.progress.toFixed(1);
-        const speed = byteHelper(stats.speed);
-        const downloaded = byteHelper(stats.downloaded);
-        const total = byteHelper(stats.total);
-        console.log(`${speed}/s - ${progress}% [${downloaded}/${total}]`);
-      })
-      .on('end', () => {
-        const zip = new StreamZip({
-          file: 'vendor/chromedriver.zip',
-          storeEntries: true
-        });
-        zip.on('ready', () => {
-          zip.extract(null, './vendor', async err => {
-            console.log(
-              err
-                ? 'Could not extract and install Chromedriver'
-                : 'Chromedriver ' + CHROMEDRIVER_VERSION + ' installed'
-            );
-            zip.close();
-            await unlink('vendor/chromedriver.zip');
-            await chmod('vendor/chromedriver', '755');
-          });
-        });
+  if (
+    process.env.npm_config_chromedriver_skip_download ||
+    process.env.CHROMEDRIVER_SKIP_DOWNLOAD
+  ) {
+    console.log('Skip downloading Chromedriver');
+  } else {
+    const downloadUrl = getChromedriverUrl();
+    if (downloadUrl) {
+      try {
+        await mkdir('vendor');
+      } catch (e) {
+        await unlink('vendor/chromedriver');
+      }
+      const dl = new DownloaderHelper(downloadUrl, 'vendor', {
+        fileName: 'chromedriver.zip'
       });
 
-    dl.start();
-  } else {
-    console.log(
-      'Skipping installing Chromedriver on ' +
-        os.platform() +
-        ' for ' +
-        os.arch() +
-        " since there's no official build"
-    );
+      dl
+        .on('error', err =>
+          console.error('Could not download Chromedriver: ' + downloadUrl, err)
+        )
+        .on('progress', stats => {
+          const progress = stats.progress.toFixed(1);
+          const speed = byteHelper(stats.speed);
+          const downloaded = byteHelper(stats.downloaded);
+          const total = byteHelper(stats.total);
+          console.log(`${speed}/s - ${progress}% [${downloaded}/${total}]`);
+        })
+        .on('end', () => {
+          const zip = new StreamZip({
+            file: 'vendor/chromedriver.zip',
+            storeEntries: true
+          });
+          zip.on('ready', () => {
+            zip.extract(null, './vendor', async err => {
+              console.log(
+                err
+                  ? 'Could not extract and install Chromedriver'
+                  : `Chromedriver ${CHROMEDRIVER_VERSION} installed in ${path.join(
+                      __dirname,
+                      'vendor'
+                    )}`
+              );
+              zip.close();
+              await unlink('vendor/chromedriver.zip');
+              await chmod('vendor/chromedriver', '755');
+            });
+          });
+        });
+
+      dl.start();
+    } else {
+      console.log(
+        'Skipping installing Chromedriver on ' +
+          os.platform() +
+          ' for ' +
+          os.arch() +
+          " since there's no official build"
+      );
+    }
   }
 }
 download();

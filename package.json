@@ -1,6 +1,6 @@
 {
   "name": "@sitespeed.io/chromedriver",
-  "version": "2.43.0",
+  "version": "2.44.0",
   "description": "Install and launch Chromedriver for Mac, Linux or Windows.",
   "main": "index.js",
   "files": [
@@ -33,11 +33,11 @@
     "node-stream-zip": "1.7.0"
   },
   "devDependencies": {
-    "eslint": "^4.6.1",
+    "eslint": "^5.10.0",
     "eslint-config-prettier": "^2.4.0",
     "eslint-plugin-prettier": "^2.2.0",
     "prettier": "^1.6.1",
-    "semver": "^5.0.1",
-    "request": "^2.69.0"
+    "request": "^2.88.0",
+    "semver": "^5.0.1"
   }
 }

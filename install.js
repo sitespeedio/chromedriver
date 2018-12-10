@@ -4,6 +4,7 @@ const StreamZip = require('node-stream-zip');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
+const pkg = require('./package');
 const { DownloaderHelper } = require('node-downloader-helper');
 const { promisify } = require('util');
 const unlink = promisify(fs.unlink);
@@ -11,7 +12,7 @@ const mkdir = promisify(fs.mkdir);
 const chmod = promisify(fs.chmod);
 
 // The version of the driver that will be installed
-const CHROMEDRIVER_VERSION = '2.44';
+const CHROMEDRIVER_VERSION = `${pkg.chromedriver_version}`;
 
 function byteHelper(value) {
   // https://gist.github.com/thomseddon/3511330
@@ -58,7 +59,11 @@ async function download() {
       try {
         await mkdir('vendor');
       } catch (e) {
-        await unlink('vendor/chromedriver');
+        try {
+          await unlink('vendor/chromedriver');
+        } catch (e) {
+          // DO nada
+        }
       }
       const dl = new DownloaderHelper(downloadUrl, 'vendor', {
         fileName: 'chromedriver.zip'

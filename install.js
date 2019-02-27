@@ -69,10 +69,9 @@ async function download() {
         fileName: 'chromedriver.zip'
       });
 
-      dl
-        .on('error', err =>
-          console.error('Could not download Chromedriver: ' + downloadUrl, err)
-        )
+      dl.on('error', err =>
+        console.error('Could not download Chromedriver: ' + downloadUrl, err)
+      )
         .on('progress', stats => {
           const progress = stats.progress.toFixed(1);
           const speed = byteHelper(stats.speed);
@@ -84,6 +83,13 @@ async function download() {
           const zip = new StreamZip({
             file: 'vendor/chromedriver.zip',
             storeEntries: true
+          });
+          zip.on('error', function(err) {
+            // We got an error from unpacking
+            console.error(
+              `Chromedriver ${CHROMEDRIVER_VERSION} could not be installed: ${err} `
+            );
+            // How should we exit?
           });
           zip.on('ready', () => {
             zip.extract(null, './vendor', async err => {

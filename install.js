@@ -13,6 +13,9 @@ const chmod = promisify(fs.chmod);
 
 // The version of the driver that will be installed
 const CHROMEDRIVER_VERSION = `${pkg.chromedriver_version}`;
+let cdnUrl = process.env.npm_config_chromedriver_cdnurl || process.env.CHROMEDRIVER_CDNURL || 'https://chromedriver.storage.googleapis.com';
+cdnUrl = cdnUrl.replace(/\/+$/, '');
+
 
 function byteHelper(value) {
   // https://gist.github.com/thomseddon/3511330
@@ -30,7 +33,7 @@ function getChromedriverUrl() {
   if (process.env.CHROMEDRIVER_BASE_URL) {
     urlBase = process.env.CHROMEDRIVER_BASE_URL;
   } else {
-    urlBase = `https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/`;
+    urlBase = `${cdnUrl}/${CHROMEDRIVER_VERSION}/`;
   }
 
   switch (os.platform()) {

@@ -103,7 +103,11 @@ async function download() {
               );
               zip.close();
               await unlink('vendor/chromedriver.zip');
-              await chmod('vendor/chromedriver', '755');
+              let driverPath = 'vendor/chromedriver';
+              if (os.platform() === 'win32') {
+                driverPath = driverPath + '.exe';
+              }
+              await chmod(driverPath, '755');
             });
           });
         });

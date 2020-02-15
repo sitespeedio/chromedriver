@@ -1,5 +1,14 @@
 language: node_js
-dist: bionic
 node_js: 12
-script:
-- node install.js && npm test && npm run check-latest
+matrix:
+    include:
+      - name: "Test on Linux"
+        dist: bionic
+        script: node install.js 
+      - name: "Test on OS X"
+        os: osx
+        osx_image: xcode11.3  
+        script:  node install.js 
+      - name: "Test on Windows"
+        os: windows         
+        script: node install.js

@@ -1,7 +1,5 @@
 language: node_js
-dist: trusty
-node_js:
-- '8'
-- '10'
+dist: bionic
+node_js: 12
 script:
 - node install.js && npm test && npm run check-latest

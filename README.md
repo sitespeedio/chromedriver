@@ -16,9 +16,9 @@ You can override where you download the Chromedriver by setting *process.env.CHR
 
 You can download another Chromedriver version by setting *process.env.CHROMEDRIVER_VERSION*.
 
-```node
+```
 CHROMEDRIVER_VERSION=81.0.4044.20 node install.js
 ```
 
-If you don't set a version, the version in the *package.json* is used. 
+If you don't set a version, [the version](https://github.com/sitespeedio/chromedriver/blob/master/package.json#L4) in the *package.json* is used. 
 

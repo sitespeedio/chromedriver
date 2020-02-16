@@ -12,7 +12,9 @@ const mkdir = promisify(fs.mkdir);
 const chmod = promisify(fs.chmod);
 
 // The version of the driver that will be installed
-const CHROMEDRIVER_VERSION = `${pkg.chromedriver_version}`;
+const CHROMEDRIVER_VERSION = process.env.CHROMEDRIVER_VERSION
+  ? process.env.CHROMEDRIVER_VERSION
+  : `${pkg.chromedriver_version}`;
 
 function byteHelper(value) {
   // https://gist.github.com/thomseddon/3511330

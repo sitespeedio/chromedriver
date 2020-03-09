@@ -1,6 +1,6 @@
 {
   "name": "@sitespeed.io/chromedriver",
-  "version": "80.0.3987-16b",
+  "version": "80.0.3987-16c",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {

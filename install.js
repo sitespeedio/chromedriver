@@ -76,10 +76,9 @@ async function download() {
       )
         .on('progress', stats => {
           const progress = stats.progress.toFixed(1);
-          const speed = byteHelper(stats.speed);
           const downloaded = byteHelper(stats.downloaded);
           const total = byteHelper(stats.total);
-          console.log(`${speed}/s - ${progress}% [${downloaded}/${total}]`);
+          console.log(`${progress}% [${downloaded}/${total}]`);
         })
         .on('end', () => {
           const zip = new StreamZip({

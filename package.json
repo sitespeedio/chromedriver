@@ -1,7 +1,7 @@
 {
   "name": "@sitespeed.io/chromedriver",
-  "version": "85.0.4183-83",
-  "chromedriver_version": "85.0.4183.83",
+  "version": "86.0.4240-22",
+  "chromedriver_version": "86.0.4240.22",
   "description": "Install and launch Chromedriver for Mac, Linux & Windows",
   "main": "index.js",
   "files": [
@@ -30,8 +30,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "node-downloader-helper": "1.0.13",
-    "node-stream-zip": "1.11.2"
+    "node-downloader-helper": "1.0.14",
+    "node-stream-zip": "1.11.3"
   },
   "devDependencies": {
     "eslint": "5.10.0",

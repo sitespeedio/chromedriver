@@ -37,7 +37,8 @@ function getChromedriverUrl() {
 
   switch (os.platform()) {
     case 'darwin':
-      return urlBase + 'chromedriver_mac64.zip';
+      if (os.arch() === 'x64') return urlBase + 'chromedriver_mac64.zip';
+      else return urlBase + 'chromedriver_mac64_m1.zip';
     case 'linux':
       if (os.arch() === 'x64') return urlBase + 'chromedriver_linux64.zip';
       else if (os.arch() === 'x32') return urlBase + 'chromedriver_linux32.zip';

@@ -30,8 +30,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "node-downloader-helper": "1.0.14",
-    "node-stream-zip": "1.11.3"
+    "node-downloader-helper": "1.0.18",
+    "node-stream-zip": "1.14.0"
   },
   "devDependencies": {
     "eslint": "5.10.0",

@@ -123,6 +123,11 @@ async function download() {
           os.arch() +
           " since there's no official build"
       );
+      if (os.platform() === 'linux' && os.arch() === 'arm') {
+        console.log(
+          'You can try downloading Chromedriver using: sudo apt-get install chromium-chromedriver -y'
+        );
+      }
     }
   }
 }

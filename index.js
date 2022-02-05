@@ -11,7 +11,10 @@ module.exports = {
     let driverPath = path.resolve(__dirname, 'vendor', 'chromedriver');
     if (os.platform() === 'win32') {
       driverPath = driverPath + '.exe';
-    } else if (os.platform() === 'linux' && os.arch() === 'arm') {
+    } else if (
+      (os.platform() === 'linux' && os.arch() === 'arm') ||
+      os.arch() === 'arm64'
+    ) {
       // Special handling for making it easy on Raspberry Pis
       try {
         const potentialChromdriverPath = execSync('which chromedriver');

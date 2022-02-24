@@ -13,7 +13,7 @@ module.exports = {
       driverPath = driverPath + '.exe';
     } else if (
       (os.platform() === 'linux' && os.arch() === 'arm') ||
-      os.arch() === 'arm64'
+      (os.platform() === 'linux' && os.arch() === 'arm64')
     ) {
       // Special handling for making it easy on Raspberry Pis
       try {

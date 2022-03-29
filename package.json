@@ -30,7 +30,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "node-downloader-helper": "1.0.19",
+    "node-downloader-helper": "2.1.0",
     "node-stream-zip": "1.15.0"
   },
   "devDependencies": {

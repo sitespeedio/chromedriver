@@ -10,7 +10,7 @@ module.exports = {
   binPath: function() {
     let driverPath = path.resolve(__dirname, 'vendor', 'chromedriver');
     if (os.platform() === 'win32') {
-      driverPath = driverPath + '.exe';
+      return driverPath + '.exe';
     } else if (
       (os.platform() === 'linux' && os.arch() === 'arm') ||
       (os.platform() === 'linux' && os.arch() === 'arm64')

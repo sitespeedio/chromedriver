@@ -113,10 +113,16 @@ async function download() {
             );
             // How should we exit?
           });
+
+          let fileEnding = '';
+          if (os.platform() === 'win32' || os.platform() === 'win64') {
+            fileEnding = '.exe';
+          }
+
           zip.on('ready', () => {
             zip.extract(
-              getPath() + '/chromedriver',
-              './vendor/chromedriver',
+              getPath() + '/chromedriver' + fileEnding,
+              './vendor/chromedriver' + fileEnding,
               async err => {
                 console.log(
                   err

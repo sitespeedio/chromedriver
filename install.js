@@ -32,19 +32,39 @@ function getChromedriverUrl() {
   if (process.env.CHROMEDRIVER_BASE_URL) {
     urlBase = process.env.CHROMEDRIVER_BASE_URL;
   } else {
-    urlBase = `https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/`;
+    urlBase = `https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROMEDRIVER_VERSION}/`;
   }
 
   switch (os.platform()) {
     case 'darwin':
-      if (os.arch() === 'x64') return urlBase + 'chromedriver_mac64.zip';
-      else return urlBase + 'chromedriver_mac_arm64.zip';
+      if (os.arch() === 'x64')
+        return urlBase + 'mac-x64/chromedriver-mac-x64.zip';
+      else return urlBase + 'mac64/chromedriver-mac-arm64.zip';
     case 'linux':
-      if (os.arch() === 'x64') return urlBase + 'chromedriver_linux64.zip';
-      else if (os.arch() === 'x32') return urlBase + 'chromedriver_linux32.zip';
+      if (os.arch() === 'x64')
+        return urlBase + 'linux64/chromedriver-linux64.zip';
       else return undefined;
     case 'win32':
-      return urlBase + 'chromedriver_win32.zip';
+      return urlBase + '/win32/chromedriver-win32.zip';
+    case 'win64':
+      return urlBase + '/win64/chromedriver-win64.zip';
+    default:
+      return undefined;
+  }
+}
+
+function getPath() {
+  switch (os.platform()) {
+    case 'darwin':
+      if (os.arch() === 'x64') return 'chromedriver-mac-x64';
+      else return 'chromedriver-mac-arm64';
+    case 'linux':
+      if (os.arch() === 'x64') return 'chromedriver-linux64';
+      else return undefined;
+    case 'win32':
+      return 'chromedriver-win32';
+    case 'win64':
+      return 'chromedriver-win64';
     default:
       return undefined;
   }
@@ -94,23 +114,27 @@ async function download() {
             // How should we exit?
           });
           zip.on('ready', () => {
-            zip.extract(null, './vendor', async err => {
-              console.log(
-                err
-                  ? 'Could not extract and install Chromedriver'
-                  : `Chromedriver ${CHROMEDRIVER_VERSION} installed in ${path.join(
-                      __dirname,
-                      'vendor'
-                    )}`
-              );
-              zip.close();
-              await unlink('vendor/chromedriver.zip');
-              let driverPath = 'vendor/chromedriver';
-              if (os.platform() === 'win32') {
-                driverPath = driverPath + '.exe';
+            zip.extract(
+              getPath() + '/chromedriver',
+              './vendor/chromedriver',
+              async err => {
+                console.log(
+                  err
+                    ? 'Could not extract and install Chromedriver'
+                    : `Chromedriver ${CHROMEDRIVER_VERSION} installed in ${path.join(
+                        __dirname,
+                        'vendor'
+                      )}`
+                );
+                zip.close();
+                await unlink('vendor/chromedriver.zip');
+                let driverPath = 'vendor/chromedriver';
+                if (os.platform() === 'win32' || os.platform() === 'win64') {
+                  driverPath = driverPath + '.exe';
+                }
+                await chmod(driverPath, '755');
               }
-              await chmod(driverPath, '755');
-            });
+            );
           });
         });
 

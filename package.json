@@ -1,7 +1,7 @@
 {
   "name": "@sitespeed.io/chromedriver",
   "version": "121.0.6167-85",
-  "chromedriver_version": "121.0.6167.85",
+  "chromedriver_version": "122.0.6261.57",
   "description": "Install and launch Chromedriver for Mac, Linux & Windows",
   "main": "index.js",
   "files": [

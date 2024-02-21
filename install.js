@@ -32,7 +32,7 @@ function getChromedriverUrl() {
   if (process.env.CHROMEDRIVER_BASE_URL) {
     urlBase = process.env.CHROMEDRIVER_BASE_URL;
   } else {
-    urlBase = `https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROMEDRIVER_VERSION}/`;
+    urlBase = `https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/`;
   }
 
   switch (os.platform()) {

@@ -45,9 +45,9 @@ function getChromedriverUrl() {
         return urlBase + 'linux64/chromedriver-linux64.zip';
       else return undefined;
     case 'win32':
-      return urlBase + '/win32/chromedriver-win32.zip';
+      return urlBase + 'win32/chromedriver-win32.zip';
     case 'win64':
-      return urlBase + '/win64/chromedriver-win64.zip';
+      return urlBase + 'win64/chromedriver-win64.zip';
     default:
       return undefined;
   }

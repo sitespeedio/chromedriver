@@ -1,13 +1,16 @@
-'use strict';
+import os from 'node:os';
+import path from 'node:path';
+import { mkdir, unlink, chmod } from 'node:fs/promises';
+import { createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+import { Readable } from 'node:stream';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+import StreamZip from 'node-stream-zip';
 
-const os = require('node:os');
-const path = require('node:path');
-const { mkdir, unlink, chmod } = require('node:fs/promises');
-const { createWriteStream } = require('node:fs');
-const { pipeline } = require('node:stream/promises');
-const { Readable } = require('node:stream');
-const StreamZip = require('node-stream-zip');
+const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The version of the driver that will be installed
 const CHROMEDRIVER_VERSION =
@@ -33,7 +36,7 @@ function getPlatformDir() {
   if (platform === 'win32') {
     return 'win32';
   }
-  return undefined;
+  return;
 }
 
 function getChromedriverUrl(dir) {
@@ -111,8 +114,8 @@ async function install() {
 
   try {
     await unlink(binPath);
-  } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
   }
 
   console.log(`Downloading Chromedriver ${CHROMEDRIVER_VERSION} from ${url}`);
@@ -123,11 +126,11 @@ async function install() {
   console.log(`Chromedriver ${CHROMEDRIVER_VERSION} installed in ${vendorDir}`);
 }
 
-install().catch(err => {
+try {
+  await install();
+} catch (error) {
   console.error(
-    `Chromedriver ${CHROMEDRIVER_VERSION} could not be installed: ${
-      err.message
-    }`
+    `Chromedriver ${CHROMEDRIVER_VERSION} could not be installed: ${error.message}`
   );
-  process.exit(1);
-});
+  process.exitCode = 1;
+}

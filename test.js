@@ -1,18 +1,16 @@
-const cp = require('node:child_process');
-const chromedriver = require('./');
+import { execFileSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import { binPath } from './index.js';
+
+const require = createRequire(import.meta.url);
 const packageVersion = require('./package.json').version;
 const [major, minor] = packageVersion.split('.');
 const expectedVersionPrefix = `ChromeDriver ${major}.${minor}`;
 
-const driverVersion = cp
-  .execFileSync(chromedriver.binPath(), ['--version'])
-  .toString();
+const driverVersion = execFileSync(binPath(), ['--version']).toString();
 
-if (driverVersion.indexOf(expectedVersionPrefix) !== 0) {
+if (!driverVersion.startsWith(expectedVersionPrefix)) {
   throw new Error(
-    'Expected driver version to be ' +
-      expectedVersionPrefix +
-      ' but it was ' +
-      driverVersion
+    `Expected driver version to be ${expectedVersionPrefix} but it was ${driverVersion}`
   );
 }

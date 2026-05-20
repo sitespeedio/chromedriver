@@ -5,7 +5,10 @@
     "es6": true
   },
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 2019
+  },
+  "globals": {
+    "fetch": "readonly"
   },
   "plugins": [
     "prettier"

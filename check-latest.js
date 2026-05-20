@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
-'use strict';
+import { createRequire } from 'node:module';
 
+const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 const LATEST_URL =
@@ -17,26 +17,24 @@ function compareVersions(a, b) {
   return 0;
 }
 
-async function main() {
+try {
   const response = await fetch(LATEST_URL);
   if (!response.ok) {
     throw new Error(`HTTP ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  const latestVersion =
-    data.channels && data.channels.Stable && data.channels.Stable.version;
+  const latestVersion = data?.channels?.Stable?.version;
   if (!latestVersion) {
     throw new Error('Could not find Stable channel version in response');
   }
   const currentVersion = pkg.chromedriver_version;
   if (compareVersions(latestVersion, currentVersion) > 0) {
     console.log(`Upgrade to ${latestVersion}`);
-    process.exit(1);
+    process.exitCode = 1;
+  } else {
+    console.log(`Relax, ${currentVersion} is the latest version`);
   }
-  console.log(`Relax, ${currentVersion} is the latest version`);
+} catch (error) {
+  console.log(`Failed to parse latest release version: ${error.message}`);
+  process.exitCode = 1;
 }
-
-main().catch(err => {
-  console.log(`Failed to parse latest release version: ${err.message}`);
-  process.exit(1);
-});

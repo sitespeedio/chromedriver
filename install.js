@@ -4,10 +4,12 @@ import { mkdir, unlink, chmod } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { Readable } from 'node:stream';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
-import StreamZip from 'node-stream-zip';
 
+const execFileAsync = promisify(execFile);
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -69,17 +71,22 @@ async function downloadFile(url, destination) {
   await pipeline(body, createWriteStream(destination));
 }
 
-async function extractDriver(zipPath, dir, destPath) {
+// System tar (bsdtar on macOS/Windows 10+, GNU tar on Linux) can extract zips.
+// --strip-components=1 drops the `chromedriver-<platform>/` prefix so the
+// binary lands directly at vendor/chromedriver[.exe].
+async function extractDriver(zipPath, dir, vendorDir) {
   const isWindows = os.platform() === 'win32';
   const entry = isWindows
     ? `chromedriver-${dir}/chromedriver.exe`
     : `chromedriver-${dir}/chromedriver`;
-  const zip = new StreamZip.async({ file: zipPath });
-  try {
-    await zip.extract(entry, destPath);
-  } finally {
-    await zip.close();
-  }
+  await execFileAsync('tar', [
+    '-xf',
+    zipPath,
+    '-C',
+    vendorDir,
+    '--strip-components=1',
+    entry
+  ]);
 }
 
 async function install() {
@@ -120,7 +127,7 @@ async function install() {
 
   console.log(`Downloading Chromedriver ${CHROMEDRIVER_VERSION} from ${url}`);
   await downloadFile(url, zipPath);
-  await extractDriver(zipPath, dir, binPath);
+  await extractDriver(zipPath, dir, vendorDir);
   await unlink(zipPath);
   await chmod(binPath, 0o755);
   console.log(`Chromedriver ${CHROMEDRIVER_VERSION} installed in ${vendorDir}`);

@@ -1,13 +1,15 @@
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { binPath } from './index.js';
+import { ensureBinPath } from './index.js';
 
 const require = createRequire(import.meta.url);
 const packageVersion = require('./package.json').version;
 const [major, minor] = packageVersion.split('.');
 const expectedVersionPrefix = `ChromeDriver ${major}.${minor}`;
 
-const driverVersion = execFileSync(binPath(), ['--version']).toString();
+const driverVersion = execFileSync(await ensureBinPath(), [
+  '--version'
+]).toString();
 
 if (!driverVersion.startsWith(expectedVersionPrefix)) {
   throw new Error(

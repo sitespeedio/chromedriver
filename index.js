@@ -1,8 +1,10 @@
 import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { install } from './install.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
@@ -33,4 +35,14 @@ export function binPath() {
   return driverPath;
 }
 
-export default { version, binPath };
+// Download the driver when it is first necessary, so that npm install has no install script.
+export async function ensureBinPath() {
+  try {
+    await access(binPath());
+  } catch {
+    await install();
+  }
+  return binPath();
+}
+
+export default { version, binPath, ensureBinPath };

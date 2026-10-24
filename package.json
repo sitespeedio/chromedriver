@@ -15,7 +15,6 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "install": "node install.js",
     "check-latest": "node check-latest.js"
   },
   "keywords": [

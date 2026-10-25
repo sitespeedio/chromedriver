@@ -1,9 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
-import { mkdir, unlink, chmod } from 'node:fs/promises';
-import { createWriteStream, realpathSync } from 'node:fs';
-import { pipeline } from 'node:stream/promises';
-import { Readable } from 'node:stream';
+import { mkdir, unlink, chmod, writeFile } from 'node:fs/promises';
+import { realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import StreamZip from 'node-stream-zip';
@@ -15,14 +13,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // The version of the driver that will be installed
 const CHROMEDRIVER_VERSION =
   process.env.CHROMEDRIVER_VERSION || pkg.chromedriver_version;
-
-function byteHelper(value) {
-  // https://gist.github.com/thomseddon/3511330
-  if (!value) return '?';
-  const units = ['B', 'kB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(value) / Math.log(1024));
-  return `${(value / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
-}
 
 function getPlatformDir() {
   const platform = os.platform();
@@ -48,25 +38,12 @@ function getChromedriverUrl(dir) {
 
 async function downloadFile(url, destination) {
   const response = await fetch(url);
-  if (!response.ok || !response.body) {
+  if (!response.ok) {
     throw new Error(
       `HTTP ${response.status} ${response.statusText} for ${url}`
     );
   }
-  const total = Number(response.headers.get('content-length')) || 0;
-  let downloaded = 0;
-  let lastLog = 0;
-  const body = Readable.fromWeb(response.body);
-  body.on('data', chunk => {
-    downloaded += chunk.length;
-    const now = Date.now();
-    if (now - lastLog >= 250) {
-      const pct = total ? ((downloaded / total) * 100).toFixed(1) : '?';
-      console.log(`${pct}% [${byteHelper(downloaded)}/${byteHelper(total)}]`);
-      lastLog = now;
-    }
-  });
-  await pipeline(body, createWriteStream(destination));
+  await writeFile(destination, Buffer.from(await response.arrayBuffer()));
 }
 
 async function extractDriver(zipPath, dir, destPath) {
@@ -83,10 +60,7 @@ async function extractDriver(zipPath, dir, destPath) {
 }
 
 export async function install() {
-  if (
-    process.env.npm_config_chromedriver_skip_download ||
-    process.env.CHROMEDRIVER_SKIP_DOWNLOAD
-  ) {
+  if (process.env.CHROMEDRIVER_SKIP_DOWNLOAD) {
     console.log('Skip downloading Chromedriver');
     return;
   }

@@ -9,7 +9,6 @@
     "index.js",
     "install.js",
     "package.json",
-    "npm-shrinkwrap.json",
     "README.md"
   ],
   "scripts": {
